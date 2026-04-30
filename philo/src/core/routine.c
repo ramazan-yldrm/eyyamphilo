@@ -4,8 +4,8 @@ static void	*handle_single(t_philo *philo, t_table *table)
 {
 	pthread_mutex_lock(philo->right_fork);
 	log_status(philo, "has taken a fork");
-	pthread_mutex_unlock(philo->right_fork);
 	ft_usleep(table->data.time_to_die + 10, table);
+	pthread_mutex_unlock(philo->right_fork);
 	return (NULL);
 }
 
@@ -46,9 +46,6 @@ void	*philo_routine(void *arg)
 
 	p = (t_philo *)arg;
 	wait_for_start(p->table);
-	pthread_mutex_lock(&p->last_eat_lock);
-	p->last_eat_time = p->table->start_time;
-	pthread_mutex_unlock(&p->last_eat_lock);
 	if (p->table->data.number_of_philos == 1)
 		return (handle_single(p, p->table));
 	if (p->id % 2 == 0)
