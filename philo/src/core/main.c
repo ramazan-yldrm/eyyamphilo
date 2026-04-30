@@ -9,7 +9,6 @@ int	main(int ac, char **av)
 		ft_putstr_fd(2, "Error: enter 5 or 6 arguments\n");
 		return (1);
 	}
-	table.gc = NULL;
 	table.forks = NULL;
 	table.philos = NULL;
 	if (parse(&table, ac, av))

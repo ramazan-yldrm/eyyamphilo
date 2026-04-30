@@ -1,4 +1,6 @@
 #include "philo.h"
+#include <string.h>
+#include <stdlib.h>
 
 static int	init_forks(t_table *table)
 {
@@ -6,9 +8,10 @@ static int	init_forks(t_table *table)
 	int	n;
 
 	n = table->data.number_of_philos;
-	table->forks = gc_malloc(&table->gc, sizeof(pthread_mutex_t) * n);
+	table->forks = malloc(sizeof(pthread_mutex_t) * n);
 	if (!table->forks)
 		return (1);
+	memset(table->forks, 0, sizeof(pthread_mutex_t) * n);
 	i = 0;
 	while (i < n)
 	{
@@ -26,13 +29,13 @@ static void	fork_turn(t_philo *philo, t_table *table, int i)
 	n = table->data.number_of_philos;
 	if (philo->id % 2 == 0)
 	{
-		philo->right_fork = &table->forks[i];
-		philo->left_fork = &table->forks[(i + 1) % n];
+		philo->right_fork = &table->forks[(i + 1) % n];
+		philo->left_fork = &table->forks[i];
 	}
 	else
 	{
-		philo->right_fork = &table->forks[(i + 1) % n];
-		philo->left_fork = &table->forks[i];
+		philo->right_fork = &table->forks[i];
+		philo->left_fork = &table->forks[(i + 1) % n];
 	}
 }
 
@@ -42,9 +45,10 @@ static int	init_philos(t_table *table)
 	int	n;
 
 	n = table->data.number_of_philos;
-	table->philos = gc_malloc(&table->gc, sizeof(t_philo) * n);
+	table->philos = malloc(sizeof(t_philo) * n);
 	if (!table->philos)
 		return (1);
+	memset(table->philos, 0, sizeof(t_philo) * n);
 	i = 0;
 	while (i < n)
 	{

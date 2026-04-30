@@ -3,14 +3,13 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iinc -pthread
 
 SRC = src/core/main.c \
-	  src/core/parse.c \
-	  src/core/init.c \
-	  src/core/simulation.c \
-	  src/core/routine.c \
-	  src/core/monitor.c\
-	  src/utils/utils.c \
-	  src/utils/gc/gc.c \
-	  src/utils/gc/clean_table.c
+      src/core/parse.c \
+      src/core/init.c \
+      src/core/simulation.c \
+      src/core/routine.c \
+      src/core/monitor.c\
+      src/utils/utils.c \
+      src/utils/clean_table.c
 
 OBJ = $(SRC:.c=.o)
 

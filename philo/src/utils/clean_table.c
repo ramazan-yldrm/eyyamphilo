@@ -1,8 +1,9 @@
 #include "philo.h"
+#include <stdlib.h>
 
-void	clean_table(t_table *table)
+void    clean_table(t_table *table)
 {
-	int	i;
+	int     i;
 
 	if (table->forks)
 	{
@@ -12,6 +13,7 @@ void	clean_table(t_table *table)
 			pthread_mutex_destroy(&table->forks[i]);
 			i++;
 		}
+		free(table->forks);
 	}
 	if (table->philos)
 	{
@@ -21,8 +23,8 @@ void	clean_table(t_table *table)
 			pthread_mutex_destroy(&table->philos[i].last_eat_lock);
 			i++;
 		}
+		free(table->philos);
 	}
 	pthread_mutex_destroy(&table->write_lock);
 	pthread_mutex_destroy(&table->stop_lock);
-	gc_free_all(&table->gc);
 }
