@@ -54,4 +54,3 @@ void	log_status(t_philo *philo, char *status)
 	pthread_mutex_unlock(&philo->table->stop_lock);
 	pthread_mutex_unlock(&philo->table->write_lock);
 }
-

@@ -4,7 +4,7 @@
 # include <pthread.h>
 
 typedef struct s_gc
-{asdasd
+{
 	void			*ptr;
 	struct s_gc		*next;
 }	t_gc;
