@@ -63,13 +63,25 @@ static int	init_philos(t_table *table)
 	return (0);
 }
 
-int	init(t_table *table)
+static void	init_table_state(t_table *table)
 {
 	table->stop_flag = 0;
 	table->start_time = 0;
+}
+
+static int	init_table_mutexes(t_table *table)
+{
 	if (pthread_mutex_init(&table->write_lock, NULL) != 0)
 		return (1);
 	if (pthread_mutex_init(&table->stop_lock, NULL) != 0)
+		return (1);
+	return (0);
+}
+
+int	init(t_table *table)
+{
+	init_table_state(table);
+	if (init_table_mutexes(table))
 		return (1);
 	if (init_forks(table))
 		return (1);

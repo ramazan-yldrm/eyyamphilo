@@ -2,13 +2,21 @@
 #include <stdio.h>
 #include <unistd.h>
 
+static long	get_last_eat_time(t_philo *philo)
+{
+	long	last_eat;
+
+	pthread_mutex_lock(&philo->last_eat_lock);
+	last_eat = philo->last_eat_time;
+	pthread_mutex_unlock(&philo->last_eat_lock);
+	return (last_eat);
+}
+
 static long	check_death(t_table *table, int i)
 {
 	long	last_eat;
 
-	pthread_mutex_lock(&table->philos[i].last_eat_lock);
-	last_eat = table->philos[i].last_eat_time;
-	pthread_mutex_unlock(&table->philos[i].last_eat_lock);
+	last_eat = get_last_eat_time(&table->philos[i]);
 	if ((get_time_ms() - last_eat) >= table->data.time_to_die)
 		return (last_eat + table->data.time_to_die);
 	return (0);
@@ -47,6 +55,13 @@ static int	check_all_ate(t_table *table)
 	return (all_ate);
 }
 
+static void	set_stop_flag(t_table *table)
+{
+	pthread_mutex_lock(&table->stop_lock);
+	table->stop_flag = 1;
+	pthread_mutex_unlock(&table->stop_lock);
+}
+
 void	monitor_routine(t_table *table)
 {
 	int		i;
@@ -66,9 +81,7 @@ void	monitor_routine(t_table *table)
 		}
 		if (check_all_ate(table))
 		{
-			pthread_mutex_lock(&table->stop_lock);
-			table->stop_flag = 1;
-			pthread_mutex_unlock(&table->stop_lock);
+			set_stop_flag(table);
 			return ;
 		}
 		usleep(1000);

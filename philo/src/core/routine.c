@@ -9,20 +9,35 @@ static void	*handle_single(t_philo *philo, t_table *table)
 	return (NULL);
 }
 
-static void	philo_eat(t_philo *philo, t_table *table)
+static void	philo_take_forks(t_philo *philo)
 {
 	pthread_mutex_lock(philo->right_fork);
 	log_status(philo, "has taken a fork");
 	pthread_mutex_lock(philo->left_fork);
 	log_status(philo, "has taken a fork");
-	log_status(philo, "is eating");
+}
+
+static void	philo_update_eat_state(t_philo *philo)
+{
 	pthread_mutex_lock(&philo->last_eat_lock);
 	philo->last_eat_time = get_time_ms();
 	philo->eat_count++;
 	pthread_mutex_unlock(&philo->last_eat_lock);
-	ft_usleep(table->data.time_to_eat, table);
+}
+
+static void	philo_release_forks(t_philo *philo)
+{
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
+}
+
+static void	philo_eat(t_philo *philo, t_table *table)
+{
+	philo_take_forks(philo);
+	log_status(philo, "is eating");
+	philo_update_eat_state(philo);
+	ft_usleep(table->data.time_to_eat, table);
+	philo_release_forks(philo);
 }
 
 static void	philo_think(t_philo *philo, t_table *table)
