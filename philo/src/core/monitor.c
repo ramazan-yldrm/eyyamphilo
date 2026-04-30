@@ -2,28 +2,26 @@
 #include <stdio.h>
 #include <unistd.h>
 
-static int	check_death(t_table *table, int i)
+static long	check_death(t_table *table, int i)
 {
-	long	time_since_eat;
-	int		is_dead;
+	long	last_eat;
 
-	is_dead = 0;
 	pthread_mutex_lock(&table->philos[i].last_eat_lock);
-	time_since_eat = get_time_ms() - table->philos[i].last_eat_time;
-	if (time_since_eat >= table->data.time_to_die)
-		is_dead = 1;
+	last_eat = table->philos[i].last_eat_time;
 	pthread_mutex_unlock(&table->philos[i].last_eat_lock);
-	return (is_dead);
+	if ((get_time_ms() - last_eat) >= table->data.time_to_die)
+		return (last_eat + table->data.time_to_die);
+	return (0);
 }
 
-static void	broadcast_death(t_table *table, int i)
+static void	broadcast_death(t_table *table, int i, long death_time)
 {
 	pthread_mutex_lock(&table->write_lock);
 	pthread_mutex_lock(&table->stop_lock);
 	if (table->stop_flag == 0)
 	{
 		table->stop_flag = 1;
-		printf("%ld %d died\n", get_time_ms() - table->start_time,
+		printf("%ld %d died\n", death_time - table->start_time,
 			table->philos[i].id);
 	}
 	pthread_mutex_unlock(&table->stop_lock);
@@ -51,16 +49,18 @@ static int	check_all_ate(t_table *table)
 
 void	monitor_routine(t_table *table)
 {
-	int	i;
+	int		i;
+	long	death_time;
 
 	while (!check_stop(table))
 	{
 		i = -1;
 		while (++i < table->data.number_of_philos)
 		{
-			if (check_death(table, i))
+			death_time = check_death(table, i);
+			if (death_time)
 			{
-				broadcast_death(table, i);
+				broadcast_death(table, i, death_time);
 				return ;
 			}
 		}
