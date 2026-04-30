@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ryildiri <ryildiri@student.42kocaeli.com.t +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/01 00:13:55 by ryildiri          #+#    #+#             */
+/*   Updated: 2026/05/01 00:17:25 by ryildiri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static int	error_and_exit(char *str)
@@ -74,9 +86,9 @@ int	parse(t_table *table, int ac, char **av)
 		if (i == 1 && value <= 0)
 			return (error_and_exit("Error: at least one philosopher!\n"));
 		if (i > 1 && i < 5 && value <= 0)
-			return (error_and_exit("Error: times must be greater than 0!\n"));
+			return (error_and_exit("Error: times must bigger than 0!\n"));
 		if (i == 5 && value <= 0)
-			return (error_and_exit("Error: must eat count must be greater than 0!\n"));
+			return (error_and_exit("Error: eat count must bigger than 0!\n"));
 		i++;
 	}
 	init_data(table, ac, av);

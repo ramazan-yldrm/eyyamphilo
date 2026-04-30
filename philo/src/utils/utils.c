@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ryildiri <ryildiri@student.42kocaeli.com.t +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/01 00:13:14 by ryildiri          #+#    #+#             */
+/*   Updated: 2026/05/01 00:13:17 by ryildiri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/time.h>
 
-static int  ft_strlen(char *str)
+static int	ft_strlen(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str && str[i])
@@ -21,7 +33,7 @@ void	ft_putstr_fd(int fd, char *str)
 
 long	get_time_ms(void)
 {
-	struct timeval  tv;
+	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
@@ -40,17 +52,12 @@ void	ft_usleep(long ms, t_table *table)
 	}
 }
 
-void	log_status(t_philo *philo, char *status)
+int	check_stop(t_table *table)
 {
-	long	time;
+	int	flag;
 
-	pthread_mutex_lock(&philo->table->write_lock);
-	pthread_mutex_lock(&philo->table->stop_lock);
-	if (!philo->table->stop_flag)
-	{
-		time = get_time_ms() - philo->table->start_time;
-		printf("%ld %d %s\n", time, philo->id, status);
-	}
-	pthread_mutex_unlock(&philo->table->stop_lock);
-	pthread_mutex_unlock(&philo->table->write_lock);
+	pthread_mutex_lock(&table->stop_lock);
+	flag = table->stop_flag;
+	pthread_mutex_unlock(&table->stop_lock);
+	return (flag);
 }

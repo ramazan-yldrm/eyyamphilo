@@ -5,11 +5,15 @@ CFLAGS = -Wall -Wextra -Werror -Iinc -pthread
 SRC = src/core/main.c \
       src/core/parse.c \
       src/core/init.c \
-      src/core/simulation.c \
-      src/core/routine.c \
-      src/core/monitor.c\
+      src/routine/monitor_routine.c \
+	  src/routine/philo_eat.c \
+      src/routine/philo_routine.c \
+	  src/routine/philo_think.c \
+	  src/routine/utils.c \
+	  src/simulation/create_philos.c \
+      src/simulation/simulation.c \
+      src/utils/clean_funcs.c \
       src/utils/utils.c \
-      src/utils/clean_table.c
 
 OBJ = $(SRC:.c=.o)
 

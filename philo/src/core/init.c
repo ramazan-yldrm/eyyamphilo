@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ryildiri <ryildiri@student.42kocaeli.com.t +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/01 00:11:57 by ryildiri          #+#    #+#             */
+/*   Updated: 2026/05/01 00:12:02 by ryildiri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 #include <string.h>
 #include <stdlib.h>
@@ -63,12 +75,6 @@ static int	init_philos(t_table *table)
 	return (0);
 }
 
-static void	init_table_state(t_table *table)
-{
-	table->stop_flag = 0;
-	table->start_time = 0;
-}
-
 static int	init_table_mutexes(t_table *table)
 {
 	if (pthread_mutex_init(&table->write_lock, NULL) != 0)
@@ -80,7 +86,8 @@ static int	init_table_mutexes(t_table *table)
 
 int	init(t_table *table)
 {
-	init_table_state(table);
+	table->stop_flag = 0;
+	table->start_time = 0;
 	if (init_table_mutexes(table))
 		return (1);
 	if (init_forks(table))
