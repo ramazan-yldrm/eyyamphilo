@@ -75,6 +75,8 @@ int	parse(t_table *table, int ac, char **av)
 			return (error_and_exit("Error: at least one philosopher!\n"));
 		if (i > 1 && i < 5 && value <= 0)
 			return (error_and_exit("Error: times must be greater than 0!\n"));
+		if (i == 5 && value <= 0)
+			return (error_and_exit("Error: must eat count must be greater than 0!\n"));
 		i++;
 	}
 	init_data(table, ac, av);
